@@ -1,0 +1,69 @@
+/*******************************************************************************
+* Autores: Adriana Devera 09-11286					       *
+*          Maria de Lourdes Garcia 10-10264                                    *
+* Archivo: Informe 		                                               *
+*                                                                              *
+*******************************************************************************/
+
+    Planificacion de hilos
+
+    Para la planificacion de hilos que construyen un arbol binario se crearon dos procedimientos hilos, "hiloIntermedio" e "hiloHoja", los hilos hoja representan las hojas del arbol, estas reciben un apuntador a un arreglo desordenado, los ordenan realizando quicksort, y devuelven un apuntador de un arreglo ordenado a su respectivo hilo intermedio padre, los hilos intermedios representan los nodos de el arbol y se encargan de repartir el trabajo entre sus dos hojas o sus dos nuevos nodos, dependiendo del caso. Cada hilo intermedio recibe como parametro un arreglo de longitud=(numero de elementos a ordenar + 2) que contiene la lista de elementos que deben ser ordenados entre sus decendientes, la cantidad de elementos que deben ser ordenados y la cantidad de hojas que se deben emplear para ordenarlos, el metodo crea dos nuevos nodos (hilos intermedios) si la cantidad de hojas necesaria para ordenar los elementos es mayor a 2, en caso contrario creara dos hojas y dividira la lista de elementos entre las hojas segun el patron indicado en el enunciado del proyecto, al regresar los dos hilos hojas o intermedios, el hilo intermedio padre toma ambos apuntadores a listas ordenadas y ejecuta merge-sort mezclando las listas, finalmente libera la memoria utilizada por sus hijos, imprime por pantalla el tiempo que tardo su ejecucion y devuelva la nueva lista a su hilo intermedio padre. Al regresar el hilo intermedio raiz al metodo main, se escribe en un archivo la lista resultante y finaliza el programa. 
+
+    Se utilizo la estrategia de pasar como parametro a cada hilo inetrmedio/hoja la longitud de el arreglo a ordenar, para poder recorrer el apuntador a arreglo de inicio a fin, ya que el lenguaje no posee funciones como "length()". Tambien se pasa como parametro la cantidad de hojas pertenecientes a ese subarbol en particular, con la finalidad de distinguir los hilos medios de las hojas. formando un arreglo de la siguiente manera.
+
+parametro = [n, h, e1, e2,... , en]
+
+    Donde n es el numero de elementos, h el numero de hojas, y e1 ... en los elementos a odenar. Note que el valor de "h" siempre sera una potencia de 2, al llamar al hilo raiz, h se inicializa en h = 2^(numeroNiveles - 1), y cada hilo descendiente se le asigna h = h/2. Hasta que se llega al caso base de h=2 en donde en lugar de crearse dos hilos intermedios se crearan dos hojas. 
+----------------------------------------------------------------------------------
+           Tabla de tiempos promedio para la ejecución de los Hilos.
+----------------------------------------------------------------------------------
+100 enteros y 5 niveles: 0.008467 milisegundos
+1024 enteros y 5 niveles: 0.005417 milisegundos
+2000 enteros y 5 niveles: 0.025701 milisegundos
+100 elementos y 6 niveles: 0.077326 milisegundos
+1024 elementos y 6 niveles: 0.099214 milisegundos
+2000 elementos y 6 niveles: 0.099951 milisegundos
+100 elementos y 7 niveles: 0.090714 milisegundos
+1024 elementos y 10 niveles: 0.101654 milisegundos
+2000 elementos y 10 niveles: 0.911542 milisegundos
+------------------------------------------------------------------------------------
+Comparacion de la ejecucion con 2^5 enteros y 5 niveles: 0.008467 milisegundos                
+------------------------------------------------------------------------------------
+Comparacion de la ejecucion con 2^15 enteros y 15 niveles: 2,104603 milisegundos
+------------------------------------------------------------------------------------
+
+
+Planificacion de Procesos
+
+    Para la planificación se procesos se realizó un programa por medio de un arreglo para facilitar la lectura
+del archivo, se realizador las verificaciones de las llamadas al sistema para que cuando faltara algun argumento
+en la consola, este mostrara un error. Se creó un arbol binario de procesos, donde los nodos eran los hijos, identificados
+como hijo izquierdo, hijo derecho, se hace fork y se comienza a crear el programa, era necesario realizar
+una llamada al sistema para ejecutar el proceso hoja, ya que este se implementó en otro archivo llamado
+hoja.c (En hoja.c se encuentra el programa que genera archivos de texto, debe esperar a extraer el arreglo de los numeros en 
+formato binario para así realizar el ordenamiento con quicksort, luego imprime el arreglo ordenado en el archivo de salida y
+toma el tiempo que tardo el proceso raíz en terminar.), se pudo realizar esto gracias a la llamada al sistema execl. Una vez ejecutado hoja.c el padre debe esperar a que sus hijos terminen y hacer wait y espera por los hijos que ha creado (izquierdo y derecho).
+
+	Una vez creados los archivos PID.txt, se leen arreglo1 (hijo1), arreglo2 (hijo2), luego se crean los procesos intermedios con el padre,
+y se toman los tiempos de ejecución de los procesos intermedios y del proceso raiz.
+	
+
+------------------------------------------------------------------------------------
+           Tabla de tiempos promedio para la ejecución de los Procesos.
+------------------------------------------------------------------------------------
+100 enteros y 5 niveles: 0.0147554 milisegundos 
+1024 enteros y 5 niveles: 0.016537 milisegundos
+2000 enteros y 5 niveles: 0.028564 milisegundos
+100 elementos y 6 niveles: 0.082079 milisegundos
+1024 elementos y 6 niveles: 0.099214 milisegundos
+2000 elementos y 6 niveles: 0.025931 milisegundos
+100 elementos y 7 niveles: 0.034067 milisegundos
+1024 elementos y 10 niveles: 0.278874 milisegundos
+2000 elementos y 10 niveles: 0.458453 milisegundos
+------------------------------------------------------------------------------------
+Comparacion de la ejecucion con 2^5 enteros y 5 niveles: 0.017257 milisegundos                
+------------------------------------------------------------------------------------
+Comparacion de la ejecucion con 2^15 enteros y 15 niveles: 3,005142 milisegundos
+------------------------------------------------------------------------------------
+
+Las ejecuciones se realizaron en una máquina con CPU core i3, con 4 nucleos.
